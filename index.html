@@ -371,9 +371,6 @@
         
         <div class="upload-section">
             <input type="file" id="file-input" multiple accept="image/*,.heic,.HEIC">
-            <button class="upload-btn" onclick="document.getElementById('file-input').click()">
-                Upload Local Photos
-            </button>
             <button class="upload-btn" onclick="refreshGallery()">
                 Refresh Gallery
             </button>
@@ -381,13 +378,6 @@
 
         <div class="stats">
             <span id="photo-count">0 photos in gallery</span>
-        </div>
-
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">All Photos</button>
-            <button class="filter-btn" data-filter="portrait">Portrait</button>
-            <button class="filter-btn" data-filter="landscape">Landscape</button>
-            <button class="filter-btn" data-filter="square">Square</button>
         </div>
 
         <div class="gallery" id="gallery">
