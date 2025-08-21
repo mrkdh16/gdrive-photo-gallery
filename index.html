@@ -414,6 +414,21 @@
             autoLoadGoogleDrivePhotos();
         });
 
+                // New event listener for the entire gallery
+        document.getElementById('gallery').addEventListener('click', function(e) {
+            // Check if the clicked item is an image inside a photo-item
+            if (e.target.tagName === 'IMG' && e.target.closest('.photo-item')) {
+                // Get the index from the parent's data-index attribute
+                const photoItem = e.target.closest('.photo-item');
+                const index = parseInt(photoItem.dataset.index, 10);
+                
+                // Open the modal if the index is a valid number
+                if (!isNaN(index)) {
+                    openModal(index);
+                }
+            }
+        });
+
         // File input handler with HEIC support
         document.getElementById('file-input').addEventListener('change', function(e) {
             const files = Array.from(e.target.files);
@@ -557,7 +572,6 @@
                 <div class="photo-item" data-index="${index}">
                     <img src="${photo.src}" 
                          alt="${photo.name}" 
-                         onclick="openModal(${index})"
                          onerror="handleImageError(this, '${photo.driveFileId || ''}')"
                          onload="handleImageLoad(this)">
                     <button class="delete-btn" onclick="deletePhoto('${photo.id}')">&times;</button>
