@@ -653,37 +653,34 @@
         async function loadGoogleDrivePhotosReal() {
             console.log('loadGoogleDrivePhotosReal called with folder ID:', googleDriveFolderId);
 
-            // Replace YOUR_API_KEY with your actual Google API key
-            const apiKey = 'AIzaSyC_srMY3j0F_IcB8aE4Dml9rt-E1uRJo7o';
-            const apiUrl = `https://www.googleapis.com/drive/v3/files?q='${googleDriveFolderId}'+in+parents+and+mimeType+contains+'image'&fields=files(id,name,size,imageMediaMetadata,webContentLink)&key=${apiKey}`;
-            
-            console.log('Making API request to:', apiUrl);
-            
+            // This now calls YOUR secure Netlify function
+            const apiUrl = `/.netlify/functions/get-drive-photos?folderId=${googleDriveFolderId}`;
+
+            console.log('Making request to Netlify function:', apiUrl);
+
             const response = await fetch(apiUrl);
             const data = await response.json();
-            
-            console.log('API response:', data);
-            
-            if (data.error) {
-                console.error('API Error:', data.error);
-                throw new Error(data.error.message);
+
+            console.log('API response from Netlify function:', data);
+
+            if (data.error || !response.ok) {
+                console.error('API Error:', data.error || data);
+                throw new Error(data.error?.message || 'Failed to fetch from Netlify function.');
             }
-            
+
             if (!data.files || data.files.length === 0) {
                 console.log('No files found in the folder');
-                return; // Don't throw error, just return empty
+                return;
             }
-            
-            // Clear existing Drive photos before adding new ones
+
+            // (The rest of the function remains the same)
             photos = photos.filter(photo => photo.source !== 'Google Drive');
-            
+
             const drivePhotos = data.files.map(file => {
                 const width = file.imageMediaMetadata?.width || 400;
                 const height = file.imageMediaMetadata?.height || 300;
-                
-                // Try multiple URL formats for better compatibility
                 const imageUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w800-h600`;
-                
+
                 return {
                     id: 'drive_' + file.id,
                     src: imageUrl,
@@ -694,10 +691,10 @@
                     orientation: getOrientation(width, height),
                     uploadDate: new Date().toLocaleDateString(),
                     source: 'Google Drive',
-                    driveFileId: file.id // Keep original ID for debugging
+                    driveFileId: file.id
                 };
             });
-            
+
             console.log('Processed drive photos:', drivePhotos);
             photos.push(...drivePhotos);
             saveToLocalStorage();
@@ -941,42 +938,6 @@
             }
             if (touchEndX > touchStartX + 50) {
                 showPrevImage();
-            }
-        }
-
-        // Test function to debug Google Drive API
-        async function testGoogleDriveAPI() {
-            console.log('=== Testing Google Drive API ===');
-            console.log('Folder ID:', googleDriveFolderId);
-            
-            const apiKey = 'AIzaSyC_srMY3j0F_IcB8aE4Dml9rt-E1uRJo7o';
-            console.log('API Key (first 10 chars):', apiKey.substring(0, 10) + '...');
-            
-            const apiUrl = `https://www.googleapis.com/drive/v3/files?q='${googleDriveFolderId}'+in+parents+and+mimeType+contains+'image'&fields=files(id,name,size,imageMediaMetadata,webContentLink)&key=${apiKey}`;
-            console.log('API URL:', apiUrl);
-            
-            try {
-                console.log('Making fetch request...');
-                const response = await fetch(apiUrl);
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
-                
-                const data = await response.json();
-                console.log('Response data:', data);
-                
-                if (data.error) {
-                    console.error('API returned error:', data.error);
-                    alert(`API Error: ${data.error.message}\n\nCheck console for details.`);
-                } else if (data.files) {
-                    console.log(`Found ${data.files.length} files`);
-                    alert(`Success! Found ${data.files.length} files in the Google Drive folder.\n\nCheck console for full details.`);
-                } else {
-                    console.log('Unexpected response format');
-                    alert('Unexpected response format. Check console for details.');
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
-                alert(`Network Error: ${error.message}\n\nCheck console for details.`);
             }
         }
 
