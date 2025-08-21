@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Awesome Photo Gallery</title>
+    <title>Rhee Family Photo Gallery</title>
     <!-- HEIC conversion library -->
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <style>
@@ -367,7 +367,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Photo Gallery</h1>
+        <h1>Rhee Family Photo Gallery</h1>
         
         <div class="upload-section">
             <input type="file" id="file-input" multiple accept="image/*,.heic,.HEIC">
@@ -679,7 +679,7 @@
             const drivePhotos = data.files.map(file => {
                 const width = file.imageMediaMetadata?.width || 400;
                 const height = file.imageMediaMetadata?.height || 300;
-                const imageUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w800-h600`;
+                const imageUrl = file.webContentLink;
 
                 return {
                     id: 'drive_' + file.id,
