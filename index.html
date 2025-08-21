@@ -655,7 +655,7 @@
             const drivePhotos = data.files.map(file => {
                 const width = file.imageMediaMetadata?.width || 400;
                 const height = file.imageMediaMetadata?.height || 300;
-                const imageUrl = file.webContentLink;
+                const imageUrl = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1600`;
 
                 return {
                     id: 'drive_' + file.id,
