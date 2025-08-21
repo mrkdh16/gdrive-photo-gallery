@@ -130,34 +130,6 @@
             font-weight: 400;
         }
 
-        .delete-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 4px;
-            cursor: pointer;
-            opacity: 0;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 300;
-        }
-
-        .photo-item:hover .delete-btn {
-            opacity: 1;
-        }
-
-        .delete-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -574,22 +546,12 @@
                          alt="${photo.name}" 
                          onerror="handleImageError(this, '${photo.driveFileId || ''}')"
                          onload="handleImageLoad(this)">
-                    <button class="delete-btn" onclick="deletePhoto('${photo.id}')">&times;</button>
                     <div class="photo-info">
                         <div class="photo-title">${photo.name}</div>
                         <div class="photo-size">${photo.size} • ${photo.width}x${photo.height}${photo.source ? ' • ' + photo.source : ''}${photo.originalFormat ? ' • ' + photo.originalFormat : ''}</div>
                     </div>
                 </div>
             `).join('');
-        }
-
-        function deletePhoto(photoId) {
-            if (confirm('Are you sure you want to delete this photo?')) {
-                photos = photos.filter(photo => photo.id !== photoId);
-                saveToLocalStorage();
-                displayPhotos();
-                updateStats();
-            }
         }
 
         function clearGallery() {
@@ -715,89 +677,6 @@
             console.log('Total photos after adding drive photos:', photos.length);
         }
 
-        // Simulated Google Drive loading (for demo)
-        async function simulateGoogleDriveLoad() {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    // Clear existing Drive photos before adding demo ones
-                    photos = photos.filter(photo => photo.source !== 'Google Drive');
-                    
-                    const drivePhotos = [
-                        {
-                            id: 'drive_' + Date.now() + Math.random(),
-                            src: 'https://picsum.photos/400/300?random=201',
-                            name: 'Auto-loaded Photo 1.jpg',
-                            size: '2.1 MB',
-                            width: 400,
-                            height: 300,
-                            orientation: 'landscape',
-                            uploadDate: new Date().toLocaleDateString(),
-                            source: 'Google Drive'
-                        },
-                        {
-                            id: 'drive_' + Date.now() + Math.random() + 1,
-                            src: 'https://picsum.photos/300/400?random=202',
-                            name: 'Auto-loaded Photo 2.jpg',
-                            size: '1.8 MB',
-                            width: 300,
-                            height: 400,
-                            orientation: 'portrait',
-                            uploadDate: new Date().toLocaleDateString(),
-                            source: 'Google Drive'
-                        },
-                        {
-                            id: 'drive_' + Date.now() + Math.random() + 2,
-                            src: 'https://picsum.photos/400/400?random=203',
-                            name: 'Auto-loaded Photo 3.jpg',
-                            size: '2.5 MB',
-                            width: 400,
-                            height: 400,
-                            orientation: 'square',
-                            uploadDate: new Date().toLocaleDateString(),
-                            source: 'Google Drive'
-                        },
-                        {
-                            id: 'drive_' + Date.now() + Math.random() + 3,
-                            src: 'https://picsum.photos/500/300?random=204',
-                            name: 'Auto-loaded Photo 4.jpg',
-                            size: '2.8 MB',
-                            width: 500,
-                            height: 300,
-                            orientation: 'landscape',
-                            uploadDate: new Date().toLocaleDateString(),
-                            source: 'Google Drive'
-                        },
-                        {
-                            id: 'drive_' + Date.now() + Math.random() + 4,
-                            src: 'https://picsum.photos/350/450?random=205',
-                            name: 'Auto-loaded Photo 5.jpg',
-                            size: '1.9 MB',
-                            width: 350,
-                            height: 450,
-                            orientation: 'portrait',
-                            uploadDate: new Date().toLocaleDateString(),
-                            source: 'Google Drive'
-                        },
-                        {
-                            id: 'drive_' + Date.now() + Math.random() + 5,
-                            src: 'https://picsum.photos/400/400?random=206',
-                            name: 'Auto-loaded Photo 6.jpg',
-                            size: '2.3 MB',
-                            width: 400,
-                            height: 400,
-                            orientation: 'square',
-                            uploadDate: new Date().toLocaleDateString(),
-                            source: 'Google Drive'
-                        }
-                    ];
-                    
-                    photos.push(...drivePhotos);
-                    saveToLocalStorage();
-                    resolve();
-                }, 1500); // Simulate loading time
-            });
-        }
-
         // Modal functionality
         function openModal(index) {
             currentImageIndex = index;
@@ -862,77 +741,6 @@
             });
         });
 
-        // Sample photos function
-        function addSamplePhotos() {
-            const samplePhotos = [
-                {
-                    id: Date.now() + Math.random(),
-                    src: 'https://picsum.photos/400/300?random=1',
-                    name: 'Beautiful Landscape',
-                    size: '2.5 MB',
-                    width: 400,
-                    height: 300,
-                    orientation: 'landscape',
-                    uploadDate: new Date().toLocaleDateString()
-                },
-                {
-                    id: Date.now() + Math.random() + 1,
-                    src: 'https://picsum.photos/300/400?random=2',
-                    name: 'Portrait Shot',
-                    size: '1.8 MB',
-                    width: 300,
-                    height: 400,
-                    orientation: 'portrait',
-                    uploadDate: new Date().toLocaleDateString()
-                },
-                {
-                    id: Date.now() + Math.random() + 2,
-                    src: 'https://picsum.photos/400/400?random=3',
-                    name: 'Square Image',
-                    size: '3.2 MB',
-                    width: 400,
-                    height: 400,
-                    orientation: 'square',
-                    uploadDate: new Date().toLocaleDateString()
-                },
-                {
-                    id: Date.now() + Math.random() + 3,
-                    src: 'https://picsum.photos/500/300?random=4',
-                    name: 'Nature Scene',
-                    size: '2.1 MB',
-                    width: 500,
-                    height: 300,
-                    orientation: 'landscape',
-                    uploadDate: new Date().toLocaleDateString()
-                },
-                {
-                    id: Date.now() + Math.random() + 4,
-                    src: 'https://picsum.photos/350/450?random=5',
-                    name: 'City View',
-                    size: '1.9 MB',
-                    width: 350,
-                    height: 450,
-                    orientation: 'portrait',
-                    uploadDate: new Date().toLocaleDateString()
-                },
-                {
-                    id: Date.now() + Math.random() + 5,
-                    src: 'https://picsum.photos/400/400?random=6',
-                    name: 'Abstract Art',
-                    size: '2.7 MB',
-                    width: 400,
-                    height: 400,
-                    orientation: 'square',
-                    uploadDate: new Date().toLocaleDateString()
-                }
-            ];
-            
-            photos.push(...samplePhotos);
-            saveToLocalStorage();
-            displayPhotos();
-            updateStats();
-        }
-
         // Add touch support for mobile
         let touchStartX = 0;
         let touchEndX = 0;
@@ -952,35 +760,6 @@
             }
             if (touchEndX > touchStartX + 50) {
                 showPrevImage();
-            }
-        }
-
-        // Force load photos from Google Drive (bypasses caching)
-        async function forceLoadDrivePhotos() {
-            console.log('=== Force Loading Drive Photos ===');
-            
-            try {
-                // Clear all existing photos first
-                photos = [];
-                
-                // Show loading state
-                isLoading = true;
-                displayPhotos();
-                updateStats();
-                
-                // Force load from real API
-                await loadGoogleDrivePhotosReal();
-                
-                console.log('Force load completed. Total photos:', photos.length);
-                alert(`Force load completed! Loaded ${photos.length} photos total.`);
-                
-            } catch (error) {
-                console.error('Force load error:', error);
-                alert(`Force load failed: ${error.message}\n\nCheck console for details.`);
-            } finally {
-                isLoading = false;
-                displayPhotos();
-                updateStats();
             }
         }
 
@@ -1008,54 +787,7 @@
             }
         }
 
-        // Test different URL formats for a specific file
-        async function testImageUrl(fileId) {
-            const formats = [
-                `https://drive.google.com/thumbnail?id=${fileId}&sz=w800-h600`,
-                `https://drive.google.com/uc?id=${fileId}`,
-                `https://drive.google.com/uc?id=${fileId}&export=view`,
-                `https://lh3.googleusercontent.com/d/${fileId}`,
-                `https://drive.google.com/file/d/${fileId}/view`
-            ];
-            
-            console.log('Testing URL formats for file:', fileId);
-            
-            for (let i = 0; i < formats.length; i++) {
-                const url = formats[i];
-                console.log(`Testing format ${i + 1}:`, url);
-                
-                try {
-                    const response = await fetch(url, { method: 'HEAD' });
-                    console.log(`Format ${i + 1} status:`, response.status, response.ok ? '✓' : '✗');
-                } catch (error) {
-                    console.log(`Format ${i + 1} error:`, error.message);
-                }
-            }
-        }
 
-        // Test image URLs with the first file found
-        async function testImageUrls() {
-            console.log('=== Testing Image URLs ===');
-            
-            if (photos.length === 0) {
-                alert('No photos loaded yet. Click "Force Load Drive Photos" first.');
-                return;
-            }
-            
-            const drivePhoto = photos.find(photo => photo.source === 'Google Drive' && photo.driveFileId);
-            
-            if (!drivePhoto) {
-                alert('No Google Drive photos found to test.');
-                return;
-            }
-            
-            console.log('Testing URLs for photo:', drivePhoto.name);
-            console.log('File ID:', drivePhoto.driveFileId);
-            
-            await testImageUrl(drivePhoto.driveFileId);
-            
-            alert('URL testing completed. Check console for results.');
-        }
     </script>
 </body>
 </html>
