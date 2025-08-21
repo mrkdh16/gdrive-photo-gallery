@@ -13,8 +13,7 @@ exports.handler = async function (event, context) {
     return { statusCode: 400, body: 'Error: Missing folderId parameter' };
   }
 
-  const apiUrl = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image'&fields=files(id,name,size,imageMediaMetadata)&key=${apiKey}`;
-
+const apiUrl = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image'&fields=files(id,name,size,imageMediaMetadata,webContentLink)&key=${apiKey}`;
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
